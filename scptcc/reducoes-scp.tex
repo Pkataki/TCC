@@ -1,0 +1,95 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+
+\title{ Resumo \footnote{Lidio Nunes de Abreu Junior}}
+\author{ linuaj@dcc.unicamp.br}
+\date{12 abril 1997}
+
+
+\begin{document}
+
+\maketitle
+
+
+\section{Introdução}
+
+Considere o conjunto $I= \{1,\dots,m \}$ e a família $S=\{ S_{1},\dots,S_{N} \}$ de subconjuntos de $I$, onde P$_{j}\subset I$, $j \in J= \{1,\dots,n \}$. Um subconjunto $J^{*}\subset J$ define um recobrimento sobre o conjunto $I$ se $\bigcup _{j \in J} P_{j}=I$.
+
+Se custos $c_{j}$ não-negativos são associados a cada $j \in J$, o custo total do recobrimento $J^{*}$ é determinado como $ \sum _{j \in J^{*}} c_{j}$. O problema de recobrimento de um conjunto (SCP) consiste em se encontrar o recobrimento de melhor compromisso (mínimo custo).
+
+Dependendo das caracteristicas de uma dada instância, pode-se eliminar do problema elementos e subconjuntos, sem que se incorra na quebra das restrições estabelecidas.
+
+\section{Reduções}
+
+\subsection{Redução 1 - Factibilidade}
+
+Se existe um elemento $i \in I$ tal que $ \forall j \in J , i \ni  P_{j}$. Trata-se de um problema infactível, visto que o elemento $i$ não pode estar presente em nenhum recobrimento. 
+
+\subsection{Redução 2 - Variáveis pré-fixadas}
+
+Se existe um elemento $i \in I$ tal que $i \in P_{j}$ para um único $j \in J$. Para todo recobrimento factível $J^{*}$ de $I$ , $j \in J^{*}$,sendo assim o elemento $i$ como todo $k \in P_{j}$ podem ser retirados do problema.
+
+\subsection{Redução 3 - Dominância de linha}
+
+Se existe $\mu , \omega \in I$ tal que $\omega \in P_{j}$ se $\mu \in P_{j}$, $j \in J$. Neste caso o elemento $\mu$ pode ser eliminado do problema visto que se $\omega \in P_{j}, j \in J^{*}$, então $\mu \in P_{j}$. 
+
+\subsection{Redução 4 - Dominância de coluna}
+
+Se para algum $S \subset J$ e subconjunto $P_{j}$ temos que $P_{j} \subseteq \bigcup _{k \in S} P_{k}$ e $ \sum _{k \in S} c_{k} < c_{j}$. O subconjunto $P_{j}$ neste caso pode ser eliminado do problema visto que se $j \in J^{*}$, então o recobrimento formado por $(J^{*} - \{ j\}) \bigcup S$ possui um custo menor.
+
+\subsection{Redução 5 - Coluna de custo dominado}
+
+Seja $d_{i} = \{ min  c_{j} | i \in P_{j} \}, j \in J$ onde $i \in I$. Se para algum $k \in J$ tem-se que $c_{k} > \sum _{i \in P_{k} } d_{i} $, então o subconjunto $ P_{k}$ pode ser eliminado do problema pelo fato de que se $k \in J^{*}$, então o recobrimento $(j^{*} - \{k \}) \bigcup _{i \in P _{k} \wedge  d_{i} = c_{j} } P_{j} $ possui um custo menor.
+
+\paragraph{}
+A redução dominância de coluna pode ser interpretada de outra maneira. Qualquer subconjunto $P_{j}$ pode ser excluído do recobrimento, caso haja uma composição de subconjuntos pertencentes a $J$, tal que todo elemento de $P_{j}$ pertence a pelo menos um subconjunto da composição e o custo da mesma é inferior ao custo de $P_{j}$.
+
+Para a análise a ser realizada, a definição da quarta redução será extendida, permitindo-se composições com o mesmo custo do subconjunto $P_{j}$. Um limite inferior para o desempenho dos algoritmos para a quarta redução pode ser obtido, determinando o número mínimo necessário de avaliações a serem efetuadas, para se verificar a existência de tais composições.
+
+Para a exclusão do subconjunto $P_{j}$ , $ j \in J$ , qualquer composição dos subconjuntos com custos não-superiores a este $ \{ P_{1}, \dots , P_{n} \} $ , onde $k =\{ j, \dots ,n \}$ , com exceção do próprio $P_{j}$, é uma possível alternativa onde pode-se verificar as características mencionadas. Os subconjuntos eventualmente com o custo igual ao de $P_{j}$ ( distintos de $P_{j}$ ), não podem participar de composições com os demais subconjuntos. Com relação aos subconjuntos $P_{ \lambda }$ , $ \lambda = \{ 1, \dots , k-1 \}$ , a presença destes não pode ser restringida a composições individuais sem antes conhecer exatamente quais são estes subconjuntos. Em relação aos subconjuntos $P_{ \lambda } $ , $ \lambda = \{ k+1, \dots , n \}$ e $c_{ \lambda } = c_{j}$ , pode-se restringir as possíveis composições com as mesmas e o número de alternativas presentes neste caso. Os subconjuntos com custos superiores ao custo de $P_{j}$ , caso existam, não estarão presentes em nenhuma composição que possibilite excluir o subconjunto $P_{j}$. 
+
+O número total de composições factíveis $F$ para a exclusão do subconjunto $P_{j}$ , é a soma de todas as combinações de tamanho $k$ , onde $k = 1, \dots ,j-1$ , mais os elementos posteriores individualmente $ \{ P_{j+1} , \dots , P_{n} \} $ . A expressão seguinte $F=C ^{j-1} _{1} + \dots + C ^{j-1} _{j-1} + n - j = \sum ^{j-1} _{k-1} C ^{j-1} _{k} + n - j = O ( 2^{n} ) $, corresponde ao número total de composições possíveis para um determinado $j$. Concluímos que algoritmos de ordem exponencial podem ser obtidos para esta redução.
+
+Considerando que existem 2 restrições a serem satisfeitas pelas composições (custos e a pertinência dos elementos de $P_{j}$). O número de alternativas que satisfazem a ambas é provavelemente inferior ao número de possibilidades rejeitadas (o que compreende as alternativas que não satisfazem a um ou ambas restrições). Pode-se explorar estas características aplicando métodos analíticos sobre os dados, possibilitando de alguma forma dividi-los sobre um dos aspectos (custo/pertinência). Realizando a partir das informações obtidas a exclusão de parte das alternativas. A metodologia empregada deve ser fácil e eficiente, de forma a não influir negativamente na ordem de complexidade da redução. Um procedimento eficiente que pode ser feito é agrupar os subconjuntos precedentes a $P_{j}$ de tal forma a obter 2 regiões, sendo que a primeira delas terá um custo total não superior ao custo de $P_{j}$.  
+
+Denotando por $ \lambda $ , $ \lambda \in \{ 1, \dots , j-1 \}$, o subconjunto de maior custo da primeira região temos que as regiões ficam assim divididas:
+
+%\begin{itemsize}
+%\item
+ * $ \{ P_{1}, \dots , P_{ \lambda } \}$ - região com custo total não-superior a $c_{j}$ ;
+%\item
+
+ * $ \{ P_{ \lambda } , \dots , P_{j} \}$ - subconjuntos restantes.
+%\end{itemsize}
+
+Para qualquer elemento $\lambda$ uma possível composição que pode possibilitar a exclusão do subconjunto $P_{j}$ é a própria região $ \{P_{1}, \dots , P_{ \lambda} \}$. Quando esta região não satisfaz os critérios impostos nenhuma de suas partições satisfará, logo $2 ^{ \lambda} -2$ alternativas são descartadas. As outras alternativas possíveis são as composições resultantes da substituição de alguns subconjuntos pertencentes a $ \{ P_{ \lambda +1} , \dots , P_{j-1} \}$ de maneira que o custo resultante permaneça não superior a $c _{j}$. Considerando que o custo de cada um destes subconjuntos é no mínimo igual a $c_{ \lambda }$. A quantidade de subconjuntos inseridos para formar uma nova composição, não pode ser superior a quantidade de subconjuntos retirados. As partições de $ \{ P_{ \lambda +1} , \dots , P_{j-1} \}$ com cardinalidade não-superior a $\lambda$ podem eventualmente possuir um custo resultante inferior ao custo de $P_{j}$, portanto também constituem possíveis composições. Independentemente do resultado da aplicação deste procedimento análitico, os subconjuntos $ \{ P_{ \lambda +1}, \dots , P_{n} \} $ individualmente constituem composições factíveis.
+
+Para uma dada instância o número de alternativas é a união de todas as possibilidades presentes nestes casos. Quando o valor de $ \lambda $ é $j-1$ as possibilidades a serem verificadas são o próprio conjunto $ \{ P_{1}, \dots , P_{ \lambda } \}$ e os subconjuntos posteriores a $P_{j}$, assim o número de composições factíveis é $1+n-j$. Para os outros valores do domínio de $\lambda$ o número de possibilidades pode ser definido pela seguinte expressão, $ 1 + \sum ^{ \lambda -1 } _{k=0} C ^{\lambda} _{k} \times ( \sum ^{\omega} _{i=1} C ^{n- \lambda -1} _{i} ) +n - j$ onde $\lambda =\{1, \dots, j-2 \}$ e $\omega = min(n- \lambda-1, \lambda -k)$.
+
+\paragraph{}
+
+A similaridade existente entre as reduções dominância de coluna e coluna de custo dominado podem ser verificadas em diversos casos, entretanto um número não despresível de exclusões são particulares da quarta redução.
+
+Isto ocorre porque a quinta redução trabalha com uma quantidade reduzida de subconjuntos, avaliando a existência de possíveis composições destes que permita excluir um subconjunto $P_{j}$ qualquer. Os subconjuntos citados referem-se ao de menor custo que contém o elemento $i \in I$. Como consequência, esta redução não prevê os casos onde um subconjunto de custo mais elevado pode integrar uma composição que permita eliminar um subconjunto $P_{j}$. A unicidade dos subconjuntos nestas composições também não é imposta. Mesmo restringindo-se a análise a poucos subconjuntos, apenas uma parcela das possíveis combinações dos mesmos é avaliada. Este é o fator limitante da abrangência desta redução quando comparada com a quarta redução, o que explica a complexidade de ordem polinomial associada a esta redução.
+
+\paragraph{}
+7 redução modificada
+
+Se para algum $ \lambda \in J$ tem-se que $c_{j} > c_{M(T_{j}) }$, onde $T_{j} = \bigcup _{i \in P_{j} } d_{i}$ e $M(T _{j} )$ corresponde a composição ótima dos elementos de $T_{j}$, ou seja, a composição de mínimo custo que satisfaz todas as restrições de $P_{j}$, então o subconjunto $P_{ \lambda }$ pode ser eliminado pois os elementos por ele recobertos podem sê-los com menor custo por $T_{j}$.
+
+Esta reformulação na definição desta redução busca abranger uma quantidade maior de exclusões, mantendo-se a ordem de complexidade polinomial. Infelizmente, determinar esta composição trata-se de um subproblema de recobrimento, onde o conjunto $I$ corresponde aos elementos de $P_{j}$ e a família $P$ os subconjuntos de $T_{j}$. Considerando a complexidade de problemas como o SCP, determinar a composição de custo mínimo envolverá uma ordem de complexidade exponencial, e mesmo neste caso esta redução ainda não possuirá a abrangência da quarta redução
+.
+
+A complexidade desta redução esta no fato de se determinar $M(T_{j})$ e não um dos possíveis $T_{j}$. Decorre que se relaxarmos um pouco a definição, pode-se voltar a ter uma redução com complexidade polinomial que apesar de ser mais fraca que a definição proposta ainda assim consegue ser mais abrangente que a definição original.
+
+\paragraph{}
+7 redução proposta
+
+Para $ \forall i \in I$, seja $ d_{i} = \{j \in J | i \in P_{j} \wedge c_{j}$ é mínimo $ \ $. Definindo-se $T_{j}= \bigcup _{ i \in P_{j} } d_{i} $ então se para algum $ \lambda \in J$ tem-se que $c_{ \lambda} > \sum _{ j \in T_{j} } c_{j} $, então o subconjunto $ P_{ \lambda }$ pode ser eliminado pois os elementos por ele recobertos podem sê-los com menor custo por $T_{j}$.
+
+Esta nova definição tem a vantagem de ser mais rigorosa quanto a formação das composições avaliadas, e não desconsidera as situações avaliadas pela definição original.
+
+A principal dificuldade para abranger a redução coluna de custo dominado há todas as exclusões obtidas pela redução dominância de coluna, é o fato de que o objetivo não é garantir que cada elemento $i \in I$ esteja associado no recobrimento com o subconjunto de menor custo que o contém, mas garantir que todo elemento $i$ está associado a algum subconjunto $P_{j}$ do recobrimento $J^{*}$ e o custo deste $c_{j^{*} } $ é mínimo.
+
+\end{document}
+\end{document}
