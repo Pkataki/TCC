@@ -12,4 +12,5 @@ class Instance
         columns.resize(num_columns);
         costs.resize(num_columns);
     }
+    void print_matrix_form();
 };
