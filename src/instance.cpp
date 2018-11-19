@@ -3,6 +3,7 @@
 void Instance::print_matrix_form()
 {
     std::vector<std::vector<bool> >matrix;
+    std:: cout << "MATRIX FORM: " << std::endl;
     matrix.resize(lines.size(),vector<bool>(columns.size()));
     for(int i = 0 ; i < lines.size(); i++)
     {
@@ -16,5 +17,14 @@ void Instance::print_matrix_form()
             std::cout << matrix[i][j] << ' ';
         }
         std::cout << std::endl;
+    }
+}
+
+void Instance::print_costs()
+{
+    std:: cout << "OBJECT'S COSTS: " << std::endl;
+    for(int i = 0 ; i < columns.size(); i++)
+    {
+        std::cout << i+1 << " : " << costs[i] << std::endl;
     }
 }

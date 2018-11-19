@@ -67,22 +67,17 @@ public:
 
     void subset(int i , int j)
     {
-        //cout << i << ' ' << j << " ** "  << ins.lines[i].size() << ' ' << ins.lines[j].size() << endl;
         int x = 0;
         while(x < ins.lines[i].size() && x < ins.lines[j].size() && ins.lines[i][x] == ins.lines[j][x])
         {
             x++;
         }
-       
         if(x == ins.lines[i].size())
         {
-         //   cout << "entrei primeiro\n";
             deleted_lines[j] = 1;
         }
         else if(x == ins.lines[j].size())
         {
-
-         //   cout << "entrei segundo\n";
             deleted_lines[i] = 1;
         }
     }
@@ -94,6 +89,8 @@ public:
         {
             for(int j = i+1; j < ins.lines.size(); j++)
             {
+                if(deleted_lines[i] || deleted_lines[j])
+                    continue;
                 subset(i,j);
             }
         }
@@ -101,10 +98,7 @@ public:
 
     void remove_lines_and_columns()
     {
-        // for(int i = 0; i < ins.lines.size();i++)
-        // {
-        //     cout << i << ' ' << deleted_lines[i] << endl;
-        // }
+       
         for(int i = 0; i < ins.lines.size(); i++)
         {
             if(deleted_lines[i] && ins.lines[i].size())
@@ -145,7 +139,9 @@ public:
         factibility();
         pre_fixed_variables();
         dominated_cost_column();
+        pre_fixed_variables();
         line_dominance();
+        pre_fixed_variables();
         remove_lines_and_columns();
         return ins;
     }
@@ -160,7 +156,7 @@ public:
 
 int main()
 {
-    auto k = Reader::read("/home/kataki/TCC_SCP/TCC/instancias/test.in");
+    auto k = Reader::read("/home/kataki/TCC_SCP/TCC/instancias/stein.9.in");
     // for(int i = 0; i < ins.costs.size(); i++)
     //     std::cout << ins.costs[i] << ' ';
     // std::cout << std::endl;
