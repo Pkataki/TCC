@@ -1,1 +1,1 @@
-g++ greedy.cpp instance.cpp reader.cpp -O3 -o scp
+g++ greedy.cpp reader.cpp instance.cpp main.cpp -O3 -o scp

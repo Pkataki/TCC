@@ -1,3 +1,5 @@
+#ifndef ADD3
+#define ADD3
 #include<vector>
 using std::vector;
 class Instance
@@ -15,3 +17,4 @@ class Instance
     void print_matrix_form();
     void print_costs();
 };
+#endif

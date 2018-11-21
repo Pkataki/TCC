@@ -154,38 +154,38 @@ public:
     }
 };
 
-int main()
-{
-    auto k = Reader::read("/home/kataki/TCC_SCP/TCC/instancias/stein.9.in");
-    // for(int i = 0; i < ins.costs.size(); i++)
-    //     std::cout << ins.costs[i] << ' ';
-    // std::cout << std::endl;
-    // for(int i = 0; i < ins.columns.size(); i++)
-    // {
-    //     std::cout << i << ": ";
-    //     for(auto &x : ins.columns[i])
-    //     {
-    //         std::cout << x << ' ';
-    //     }
-    //     std::cout << std::endl;
-    // }
-    SCP_solver x = Instance(k);
-    auto ins = x.apply();
-    for(int i = 0; i < ins.costs.size(); i++)
-        std::cout << ins.costs[i] << ' ';
-    std::cout << std::endl;
-    for(int i = 0; i < ins.lines.size(); i++)
-    {
-        std::cout << i << ": ";
-        for(auto &x : ins.lines[i])
-        {
-            std::cout << x << ' ';
-        }
-        std::cout << std::endl;
-    }
+// int main(int argc, char** argv) 
+// {
+//     auto k = Reader::read("/home/kataki/TCC_SCP/TCC/instancias/stein.9.in");
+//     // for(int i = 0; i < ins.costs.size(); i++)
+//     //     std::cout << ins.costs[i] << ' ';
+//     // std::cout << std::endl;
+//     // for(int i = 0; i < ins.columns.size(); i++)
+//     // {
+//     //     std::cout << i << ": ";
+//     //     for(auto &x : ins.columns[i])
+//     //     {
+//     //         std::cout << x << ' ';
+//     //     }
+//     //     std::cout << std::endl;
+//     // }
+//     SCP_solver x = Instance(k);
+//     auto ins = x.apply();
+//     for(int i = 0; i < ins.costs.size(); i++)
+//         std::cout << ins.costs[i] << ' ';
+//     std::cout << std::endl;
+//     for(int i = 0; i < ins.lines.size(); i++)
+//     {
+//         std::cout << i << ": ";
+//         for(auto &x : ins.lines[i])
+//         {
+//             std::cout << x << ' ';
+//         }
+//         std::cout << std::endl;
+//     }
 
-    cout << " *** " << endl;
-    ins.print_matrix_form();
+//     cout << " *** " << endl;
+//     ins.print_matrix_form();
 
-    return 0;
-}
+//     return 0;
+// }

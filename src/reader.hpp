@@ -1,3 +1,6 @@
+#ifndef ADD2
+#define ADD2
+
 #include<vector>
 #include <string>
 #include "instance.hpp"
@@ -8,3 +11,5 @@ class Reader
     public: 
     static Instance read(string path);
 };
+
+#endif
