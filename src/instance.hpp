@@ -1,5 +1,5 @@
-#ifndef ADD3
-#define ADD3
+#ifndef INSTANCE_H
+#define INSTANCE_H
 #include<vector>
 using std::vector;
 class Instance

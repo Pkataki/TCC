@@ -1,5 +1,5 @@
-#ifndef ADD1
-#define ADD1
+#ifndef GREEDY_H
+#define GREEDY_H
 #include<vector>
 #include<limits>
 #include<set>

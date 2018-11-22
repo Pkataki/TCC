@@ -1,5 +1,5 @@
-#ifndef ADD2
-#define ADD2
+#ifndef READER_H
+#define READER_H
 
 #include<vector>
 #include <string>
