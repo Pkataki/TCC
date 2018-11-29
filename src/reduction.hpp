@@ -14,7 +14,6 @@ class SCP_Reduction
 {
 
     vector<bool>deleted_columns,deleted_lines;
-    
     Instance ins;
 
 public:
@@ -28,6 +27,7 @@ public:
     Instance apply();
     SCP_Reduction(Instance x, vector<bool>used_columns)
     {
+        are_in_solution.clear();
         deleted_columns = used_columns;
         deleted_lines.resize(x.lines.size(),0);
         ins = x;

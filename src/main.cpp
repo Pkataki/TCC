@@ -12,9 +12,10 @@ int main(int argc, char *argv[])
     mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
  
     
-    cout << " ******** GREEDY *********\n";
+    
     Instance k = Reader::read(argv[1]);
     SCP_greedy x = SCP_greedy(k, f);
+    cout << " ******** GREEDY *********\n";
     auto ins = x.run();
 
     cout  << std::fixed << std::setprecision(10) << "Value Solution: "<< ins << endl;
@@ -29,7 +30,7 @@ int main(int argc, char *argv[])
         double ma = DBL_MAX;
         int qt = 0;
         int ans = 0;
-        for(int it = 0; it < 10000; it++)
+        for(int it = 0; it < 100; it++)
         {
             std::shuffle(v.begin(), v.end(), rng);
             set<int>s;
@@ -67,7 +68,7 @@ int main(int argc, char *argv[])
         double ma = DBL_MAX;
         int qt = 0;
         int ans = 0;
-        for(int it = 0; it < 5000; it++)
+        for(int it = 0; it < 100; it++)
         {
             std::shuffle(p.begin(), p.end(), rng);
             set<int>s;
