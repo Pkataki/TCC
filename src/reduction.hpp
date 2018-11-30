@@ -18,7 +18,8 @@ class SCP_Reduction
 
 public:
     vector<int>are_in_solution;
-    int factibility();
+    vector<pair<double,int> >v;
+    void update_deleted_lines();
     void dominated_cost_column();
     void pre_fixed_variables();
     void subset(int i , int j);

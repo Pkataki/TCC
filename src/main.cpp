@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     Instance k = Reader::read(argv[1]);
     SCP_greedy x = SCP_greedy(k, f);
     cout << " ******** GREEDY *********\n";
-    auto ins = x.run();
+    auto ins = x.run_reduction();
 
     cout  << std::fixed << std::setprecision(10) << "Value Solution: "<< ins << endl;
     double a = 0, b = 0;

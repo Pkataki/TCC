@@ -19,8 +19,9 @@ int main(int argc, char *argv[])
 
     Instance k = Reader::read(argv[1]);
     SCP_greedy x = SCP_greedy(k, f);
-    cout << fixed << setprecision(5)  << "With reduction: " << x.run_reduction() << endl;
-    cout << fixed << setprecision(5) << "Without reduction: " << x.run() << endl;
+    double w = x.run_reduction();
+    cout << fixed << setprecision(5)  << "With reduction: " << w << endl;
+    //cout << fixed << setprecision(5) << "Without reduction: " << x.run() << endl;
 
     glp_prob *mip = glp_create_prob();
     glp_set_prob_name(mip, "SCP");
@@ -42,7 +43,7 @@ int main(int argc, char *argv[])
         glp_set_col_name(mip, i+1, s.c_str());
         glp_set_col_bnds(mip, i+1, GLP_DB, 0.0, 1.0);
         glp_set_obj_coef(mip, i+1, k.costs[i]); 
-        glp_set_col_kind(mip, i+1, GLP_BV);   
+        glp_set_col_kind(mip, i+1, GLP_CV);   
     }
 
     int qt = 1;
@@ -68,7 +69,8 @@ int main(int argc, char *argv[])
     parm.cov_cuts = GLP_ON;
     parm.clq_cuts = GLP_ON;
     parm.binarize = GLP_ON;
-    glp_write_lp(mip,NULL,"scp.lp");
+   // glp_write_lp(mip,NULL,"scp.lp");
+    
     int err = glp_intopt(mip, &parm);
 
     double z = glp_mip_obj_val(mip);
@@ -84,6 +86,7 @@ int main(int argc, char *argv[])
 
     glp_delete_prob(mip);
 
+    cout << "gap: " << ((w - z) / w) * 100 << endl; 
 
     return 0;
 }
