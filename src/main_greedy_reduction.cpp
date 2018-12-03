@@ -11,7 +11,7 @@ double f1(double c, vector<int> x)
 
 double f2(double c, vector<int> x)
 {   
-    return c / x.size() * log(x.size());
+    return c / (x.size() * log(x.size()));
 }
 
 double f3(double c, vector<int> x)
@@ -21,7 +21,7 @@ double f3(double c, vector<int> x)
 
 double f4(double c, vector<int> x)
 {   
-    return c / x.size() * log2(x.size());
+    return c / (x.size() * log2(x.size()));
 }
 
 double f5(double c, vector<int> x)
