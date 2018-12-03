@@ -18,8 +18,24 @@ int SCP_greedy::choose_best_object()
 {
     if(v.size() == 0)
         return -1;
-    while(used_columns[v.back().second] == 1) v.pop_back();
-    int idx = v.back().second;   
+    int idx;
+    while(v.size())
+    {
+        idx = v.back().second;
+        v.pop_back();
+        if(used_columns[idx] == 1)
+            continue;
+        bool ok = 0;
+        for(auto &x: ins.columns[idx])
+        {
+            if(elements_in_solution.count(x) == 0)
+            {
+                ok = 1;
+            }
+        }
+        if(ok)
+            break;
+    }
     v.pop_back();
     return idx;
 }
@@ -99,11 +115,13 @@ double SCP_greedy::run_reduction()
 
         used_columns[best_choice] = 1;
         used[best_choice] = 1;
-
+        cout << best_choice << ": ";
         for(auto &w: ins.columns[best_choice])
         {
+            cout << w << ' '; 
             elements_in_solution.insert(w);
         }
+        cout << endl;
 
     }
 
@@ -125,11 +143,12 @@ double SCP_greedy::run()
     fill(used_columns.begin(), used_columns.end(), 0);
     objects_solution.clear();
     greedy_cost = 0;
-    
+    cout << used_columns.size() << endl;
     v.clear();
     vector<int>a;
     for(int i = 0; i < ins.columns.size(); i++)
     {
+        cout << function_of_choice(ins.costs[i], ins.columns[i]) << endl;
         v.push_back({function_of_choice(ins.costs[i], ins.columns[i]), i});
     }
     sort(v.begin(),v.end(),greater<pair<double,int> >());
@@ -143,13 +162,18 @@ double SCP_greedy::run()
 
         used_columns[best_choice] = 1;
         a.push_back(best_choice);
-        for(auto &x: ins.columns[best_choice])
+       // cout << best_choice << ": ";
+        for(auto &w: ins.columns[best_choice])
         {
-            elements_in_solution.insert(x);
+        //    cout << w << ' ';
+
+            elements_in_solution.insert(w);
         }
+        //cout << endl;
 
     }
     greedy_cost = 0;
+    cout << a.size() << endl;
     for(auto &x : a)
     {
         objects_solution.push_back(x+1);
