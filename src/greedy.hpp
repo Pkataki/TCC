@@ -25,6 +25,7 @@ public:
     vector<pair<double,int> >v;
     vector<int>objects_solution;
     set<int>elements_in_solution;
+    SCP_greedy(){}
     SCP_greedy(Instance ins, function<double (double, vector<int>)> function_of_choice ) : ins(ins), 
     function_of_choice(function_of_choice)
     {

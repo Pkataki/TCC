@@ -1,11 +1,47 @@
 #include<bits/stdc++.h>
 #include "greedy.hpp"
+#include "CPUTimer.hpp"
 #include<glpk.h>
 using namespace std;
 
-double f(double c, vector<int> x)
+double f1(double c, vector<int> x)
 {   
-    return pow(c,1/2) / log(x.size() * x.size());
+    return c;
+}
+
+double f2(double c, vector<int> x)
+{   
+    return c / x.size() * log(x.size());
+}
+
+double f3(double c, vector<int> x)
+{   
+    return c / log2(x.size());
+}
+
+double f4(double c, vector<int> x)
+{   
+    return c / x.size() * log2(x.size());
+}
+
+double f5(double c, vector<int> x)
+{   
+    return c / x.size();
+}
+
+double f6(double c, vector<int> x)
+{   
+    return c / pow(x.size(),2);
+}
+
+double f7(double c, vector<int> x)
+{   
+    return pow(c,1/2) / pow(x.size(),2);
+}
+
+double f8(double c, vector<int> x)
+{   
+    return pow(c,1/3) / log(pow(x.size(),2));
 }
 
 const int maxn = 10000000;
@@ -13,17 +49,10 @@ const int maxn = 10000000;
 int ia[maxn],ja[maxn];
 double ar[maxn];
 
-int main(int argc, char *argv[])
+
+void create_model(Instance k)
 {
-    mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-
-    Instance k = Reader::read(argv[1]);
-    SCP_greedy x = SCP_greedy(k, f);
-    double w = x.run_reduction();
-    cout << fixed << setprecision(5)  << "With reduction: " << w << endl;
-    //cout << fixed << setprecision(5) << "Without reduction: " << x.run() << endl;
-
-    glp_prob *mip = glp_create_prob();
+     glp_prob *mip = glp_create_prob();
     glp_set_prob_name(mip, "SCP");
     glp_set_obj_dir(mip, GLP_MIN);
 
@@ -43,7 +72,7 @@ int main(int argc, char *argv[])
         glp_set_col_name(mip, i+1, s.c_str());
         glp_set_col_bnds(mip, i+1, GLP_DB, 0.0, 1.0);
         glp_set_obj_coef(mip, i+1, k.costs[i]); 
-        glp_set_col_kind(mip, i+1, GLP_CV);   
+        glp_set_col_kind(mip, i+1, GLP_BV);   
     }
 
     int qt = 1;
@@ -74,19 +103,61 @@ int main(int argc, char *argv[])
     int err = glp_intopt(mip, &parm);
 
     double z = glp_mip_obj_val(mip);
-    
-    cout << "Z = " << z << endl;
-
-    for(int i = 0; i < k.columns.size(); i++)
-    {
-        double x = glp_mip_col_val(mip, i+1);
-        if(x > 0.0)
-            cout  << "x["<< i+1 << "] = " << x << endl;
-    }
-
+    cout << "LP: " << z << endl;
     glp_delete_prob(mip);
+}
 
-    cout << "gap: " << ((w - z) / w) * 100 << endl; 
+int main(int argc, char *argv[])
+{
+    //mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+
+    Instance k = Reader::read(argv[1]);
+    int idx = stoi(argv[2]);
+    SCP_greedy x;
+    switch(idx)
+    {
+        case 1:
+            x = SCP_greedy(k, f1);        
+            break;
+        case 2:
+            x = SCP_greedy(k, f2);        
+            break;
+        case 3:
+            x = SCP_greedy(k, f3);        
+            break;
+        case 4:
+            x = SCP_greedy(k, f4);        
+            break;
+        case 5:
+            x = SCP_greedy(k, f5);        
+            break;
+        case 6:
+            x = SCP_greedy(k, f6);        
+            break;
+        case 7:
+            x = SCP_greedy(k, f7);        
+            break;
+        case 8:
+            x = SCP_greedy(k, f8);        
+            break;
+        default:
+            cout << "invalid number\n";
+    }
+   
+   
+    cout << "************** RESULTADOS ***************\n\n";
+    
+    
+    // //cout << fixed << setprecision(5) << "Greedy without reduction: " << x.run() << endl;
+    CPUTimer c;
+    c.start();
+    //create_model(k);
+    double w = x.run();
+    c.stop();
+    cout << fixed << setprecision(5)  << w << "  with " << c.getCPUTotalSecs() << " seconds " << endl;
+    
+    cout << "\n\n*****************************************\n";
+
 
     return 0;
 }

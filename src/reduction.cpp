@@ -141,7 +141,7 @@ Instance SCP_Reduction:: apply()
     pre_fixed_variables();
     dominated_cost_column();
     pre_fixed_variables();
-    line_dominance();
+    //line_dominance();
     pre_fixed_variables();
     remove_lines_and_columns();
     return ins;
