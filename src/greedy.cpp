@@ -16,8 +16,7 @@ using std::pair;
 
 int SCP_greedy::choose_best_object()
 {
-    if(v.size() == 0)
-        return -1;
+
     int idx;
     while(v.size())
     {
@@ -31,17 +30,30 @@ int SCP_greedy::choose_best_object()
         {
             if(elements_in_solution.count(x) == 0)
             {
-                ok = 1;
+                return idx;
             }
         }
-        if(ok)
-            break;
     }
-    //v.pop_back();
-    return idx;
+    return -1;
 }
 
-
+void print(int lines_size, int elements_in_solution_size)
+{
+    double progress = 1;
+    int barWidth = 70;
+    progress = double(lines_size - elements_in_solution_size) / lines_size;
+    progress = 1 - progress;
+    std::cout << "[";
+    int pos = barWidth * progress;
+    for (int i = 0; i < barWidth; i++) {
+        if (i < pos) std::cout << "=";
+        else if (i == pos) std::cout << ">";
+        else std::cout << " ";
+    }
+    std::cout << "] " << int(progress * 100.0) << " %\r";
+    std::cout.flush();
+        
+}
 
 double SCP_greedy::run_reduction()
 {
@@ -59,26 +71,11 @@ double SCP_greedy::run_reduction()
     }
     sort(v.begin(),v.end(),greater<pair<double,int> >());
     
-    vector<int>a;
+    set<int>a;
+    
     while(elements_in_solution.size() < ins.lines.size())
     {
-        
-
-        double progress = 1;
-        int barWidth = 70;
-        progress = double(ins.lines.size() - elements_in_solution.size()) / ins.lines.size();
-        progress = 1 - progress;
-        std::cout << "[";
-        int pos = barWidth * progress;
-        for (int i = 0; i < barWidth; i++) {
-            if (i < pos) std::cout << "=";
-            else if (i == pos) std::cout << ">";
-            else std::cout << " ";
-        }
-        std::cout << "] " << int(progress * 100.0) << " %\r";
-        std::cout.flush();
-        
-
+        print(ins.lines.size(), elements_in_solution.size());
         SCP_Reduction x = SCP_Reduction(red, used_columns);
         red = x.apply();
 
@@ -102,30 +99,28 @@ double SCP_greedy::run_reduction()
         for(auto &w : x.are_in_solution )
         {
             used_columns[w] = 1;
-            a.push_back(w);
+            a.insert(w);
             for(auto &y: ins.columns[w])
             {
                 elements_in_solution.insert(y);
             }
         }
+
         if(elements_in_solution.size() == ins.lines.size())
             break;
+        
         int best_choice = choose_best_object();
         if(best_choice == -1)
             break;
 
         used_columns[best_choice] = 1;
-        a.push_back(best_choice);
+        a.insert(best_choice);
         for(auto &w: ins.columns[best_choice])
         {
-            //cout << w << ' '; 
             elements_in_solution.insert(w);
         }
-        //cout << endl;
-
     }
 
-    elements_in_solution.clear();
     for(auto &x : a)
     {
         objects_solution.push_back(x+1);
@@ -140,16 +135,13 @@ double SCP_greedy::run()
     fill(used_columns.begin(), used_columns.end(), 0);
     objects_solution.clear();
     greedy_cost = 0;
-    cout << used_columns.size() << endl;
     v.clear();
     vector<int>a;
     for(int i = 0; i < ins.columns.size(); i++)
     {
-        cout << function_of_choice(ins.costs[i], ins.columns[i]) << endl;
         v.push_back({function_of_choice(ins.costs[i], ins.columns[i]), i});
     }
     sort(v.begin(),v.end(),greater<pair<double,int> >());
-    cout << ins.lines.size() << endl;
     while(elements_in_solution.size() < ins.lines.size())
     {
 
@@ -166,11 +158,14 @@ double SCP_greedy::run()
 
     }
     greedy_cost = 0;
-    cout << a.size() << endl;
+    //cout << a.size() << endl;
+    sort(a.begin(),a.end());
     for(auto &x : a)
     {
+    //   cout << x+1 << ' '; 
         objects_solution.push_back(x+1);
         greedy_cost += ins.costs[x];
     }
+    //cout << endl;
     return greedy_cost;
 }

@@ -5,6 +5,7 @@
 #include<algorithm>
 #include<iostream>
 #include<limits>
+#include<set>
 #include "reader.hpp"
 using std::vector;
 using namespace std;
@@ -17,7 +18,7 @@ class SCP_Reduction
     Instance ins;
 
 public:
-    vector<int>are_in_solution;
+    set<int>are_in_solution;
     void update_deleted_lines();
     void dominated_cost_column();
     void pre_fixed_variables();
