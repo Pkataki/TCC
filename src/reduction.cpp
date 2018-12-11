@@ -46,8 +46,11 @@ void SCP_Reduction::pre_fixed_variables()
     {
         if(deleted_lines[i] || ins.lines[i].size() != 1)
             continue;
-       // cout << "linha " << i << endl;
         deleted_columns[ins.lines[i][0]] = 1;
+        for(auto &x: ins.columns[ins.lines[i][0]])
+        {
+            deleted_lines[x] = 1;
+        }
         deleted_lines[i] = 1;
         are_in_solution.insert(ins.lines[i][0]);
     }
@@ -110,7 +113,7 @@ void SCP_Reduction::remove_lines_and_columns()
             ins.lines[i].clear();
         else
         {
-            w.clear();
+             w.clear();
             for(auto &x: ins.lines[i])
             {
                 if(deleted_columns[x])
@@ -148,34 +151,33 @@ Instance SCP_Reduction::apply()
 {
 
     update_deleted_lines();
-    vector<function<void (const SCP_Reduction)> > permutation;
-    permutation.push_back(&SCP_Reduction::line_dominance);
-    permutation.push_back(&SCP_Reduction::pre_fixed_variables);
-    permutation.push_back(&SCP_Reduction::dominated_cost_column);
-    srand(time(NULL));
-    random_shuffle(permutation.begin(), permutation.end());
-    random_shuffle(permutation.begin(), permutation.end());
-    
+    // vector<function<void (const SCP_Reduction)> > permutation;
+    // permutation.push_back(&SCP_Reduction::line_dominance);
+    // permutation.push_back(&SCP_Reduction::pre_fixed_variables);
+    // permutation.push_back(&SCP_Reduction::dominated_cost_column);
+    // srand(time(NULL));
+    // random_shuffle(permutation.begin(), permutation.end());
+    // random_shuffle(permutation.begin(), permutation.end());
+    // remove_lines_and_columns();
+    // for(int i = 0; i < 3; i++)
+    // {
+    //     permutation[i](*this);
+    //     remove_lines_and_columns();
+    //     pre_fixed_variables();
+    //     remove_lines_and_columns();
+    // }
+    // remove_lines_and_columns(); 
     remove_lines_and_columns();
-    for(int i = 0; i < 3; i++)
-    {
-        permutation[i](*this);
-        remove_lines_and_columns();
-        pre_fixed_variables();
-        remove_lines_and_columns();
-    }
-    remove_lines_and_columns(); 
-    // remove_lines_and_columns();
-    // update_deleted_lines();
-    // pre_fixed_variables();
-    // remove_lines_and_columns();
-    // dominated_cost_column();
-    // remove_lines_and_columns();
-    // pre_fixed_variables();
-    // remove_lines_and_columns();
-    // line_dominance();
-    // remove_lines_and_columns();
-    // pre_fixed_variables();
-    // remove_lines_and_columns();
+    update_deleted_lines();
+    pre_fixed_variables();
+    remove_lines_and_columns();
+    dominated_cost_column();
+    remove_lines_and_columns();
+    pre_fixed_variables();
+    remove_lines_and_columns();
+    line_dominance();
+    remove_lines_and_columns();
+    pre_fixed_variables();
+    remove_lines_and_columns();
     return ins;
 }

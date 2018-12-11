@@ -36,12 +36,12 @@ double f6(double c, vector<int> x)
 
 double f7(double c, vector<int> x)
 {   
-    return pow(c,1/2) / pow(x.size(),2);
+    return pow(c,1.0/2) / pow(x.size(),2);
 }
 
 double f8(double c, vector<int> x)
 {   
-    return pow(c,1/3) / log(pow(x.size(),2));
+    return pow(c,1.0/3) / log(pow(x.size(),2));
 }
 
 const int maxn = 10000000;
@@ -144,25 +144,74 @@ int main(int argc, char *argv[])
             cout << "invalid number\n";
     }
    
+    vector<function<double (double,vector<int>)> >v;
+    v.push_back(f1);
+    v.push_back(f2);
+    v.push_back(f3);
+    v.push_back(f4);
+    v.push_back(f5);
+    v.push_back(f6);
+    v.push_back(f7);
    
-    cout << "//************** RESULTADOS ***************\n\n";
+    vector<double>s1,s2,t1,t2;
+    cout << "Beggining to process " << argv[1] << endl;
+    int count = 1;
+    for(auto &w: v)
+    {
+        cout << "Running " << count << endl;
+        count++;
+        CPUTimer c;
+        x = SCP_greedy(k,w);
+        c.start();
+        s1.push_back(x.run());
+        c.stop();
+        t1.push_back(c.getCPUTotalSecs());
+        
+        c.start();
+        s2.push_back(x.run_reduction());
+        c.stop();
+        t2.push_back(c.getCPUTotalSecs());
+        
+    }
+    cout << "\nForça bruta\n";
+    for(auto &w: s1)
+    {
+       cout << fixed << setprecision(2) << " & " << w;
+    }
+    cout << "\nReduções\n";
+    for(auto &w: s2)
+    {
+       cout << fixed << setprecision(2) << " & " << w;
+    }
+    cout << "\nTempo Força bruta\n";
+    for(auto &w: t1)
+    {
+       cout << fixed << setprecision(3) << " & " << w;
+    }
+    cout << "\nTempo Reduções\n";
+    for(auto &w: t2)
+    {
+       cout << fixed << setprecision(3) << " & " << w;
+    }
+    cout << endl;
+    cout << "END!!" << endl;
+
+    // cout << "//************** RESULTADOS ***************\n\n";
     
     
-    // //cout << fixed << setprecision(5) << "Greedy without reduction: " << x.run() << endl;
-    CPUTimer c;
-    c.start();
-    double w1 = x.run();
-    //create_model(k);
-    c.stop();
-    cout << fixed << setprecision(5)  << w1 << "  with " << c.getCPUTotalSecs() << " seconds " << endl;
+    // CPUTimer c;
+    // c.start();
+    // double w1 = x.run();
+    // c.stop();
+    // cout << fixed << setprecision(5)  << w1 << "  with " << c.getCPUTotalSecs() << " seconds " << endl;
     
 
-    c.start();
-    double w = x.run_reduction();
-    c.stop();
-    cout << fixed << setprecision(5)<<  "Reductions:  "  << w << "  with " << c.getCPUTotalSecs() << " seconds " << endl;
+    // c.start();
+    // double w = x.run_reduction();
+    // c.stop();
+    // cout << fixed << setprecision(5)<<  "Reductions:  "  << w << "  with " << c.getCPUTotalSecs() << " seconds " << endl;
     
-    cout << "\n\n*****************************************\n";
+    // cout << "\n\n*****************************************\n";
 
 
     return 0;

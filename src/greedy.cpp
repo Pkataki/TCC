@@ -37,6 +37,7 @@ int SCP_greedy::choose_best_object()
     return -1;
 }
 
+
 void print(int lines_size, int elements_in_solution_size)
 {
     double progress = 1;
@@ -70,18 +71,16 @@ double SCP_greedy::run_reduction()
         v.push_back({function_of_choice(ins.costs[i], ins.columns[i]), i});
     }
     sort(v.begin(),v.end(),greater<pair<double,int> >());
-    
     set<int>a;
-    
     while(elements_in_solution.size() < ins.lines.size())
     {
-        print(ins.lines.size(), elements_in_solution.size());
+       // print(ins.lines.size(), elements_in_solution.size());
         SCP_Reduction x = SCP_Reduction(red, used_columns);
         red = x.apply();
 
         for(int i = 0; i < red.lines.size(); i++)
         {
-            if(red.lines[i].size() == 0)
+            if(red.lines[i].size() == 0 )
             {
                 elements_in_solution.insert(i);
             }    
@@ -99,6 +98,7 @@ double SCP_greedy::run_reduction()
         for(auto &w : x.are_in_solution )
         {
             used_columns[w] = 1;
+            greedy_cost += ins.costs[w];
             a.insert(w);
             for(auto &y: ins.columns[w])
             {
@@ -111,21 +111,35 @@ double SCP_greedy::run_reduction()
         
         int best_choice = choose_best_object();
         if(best_choice == -1)
+        {
+            cout << "error " << endl;
+            exit(0);
             break;
+        }
 
         used_columns[best_choice] = 1;
         a.insert(best_choice);
+        greedy_cost += ins.costs[best_choice];
+
         for(auto &w: ins.columns[best_choice])
         {
             elements_in_solution.insert(w);
         }
+        // for(int i = 0 ; i < used_columns.size(); i++)
+        //     if(used_columns[i])
+        //         red.columns[i].clear();
+        for(auto &x: elements_in_solution)
+        {
+            red.lines[x].clear();
+        }
     }
-
-    for(auto &x : a)
+    elements_in_solution.clear();
+    for(auto &x: a)
     {
-        objects_solution.push_back(x+1);
-        greedy_cost += ins.costs[x];
+        for(auto &k : ins.columns[x])
+            elements_in_solution.insert(k);
     }
+    //cout << elements_in_solution.size() << ' ' << ins.lines.size() << endl;
     return greedy_cost;
 }
 
@@ -142,6 +156,7 @@ double SCP_greedy::run()
         v.push_back({function_of_choice(ins.costs[i], ins.columns[i]), i});
     }
     sort(v.begin(),v.end(),greater<pair<double,int> >());
+    
     while(elements_in_solution.size() < ins.lines.size())
     {
 
@@ -158,14 +173,13 @@ double SCP_greedy::run()
 
     }
     greedy_cost = 0;
-    //cout << a.size() << endl;
     sort(a.begin(),a.end());
     for(auto &x : a)
     {
-    //   cout << x+1 << ' '; 
+
         objects_solution.push_back(x+1);
         greedy_cost += ins.costs[x];
     }
-    //cout << endl;
+
     return greedy_cost;
 }
